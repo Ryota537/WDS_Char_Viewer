@@ -11,6 +11,7 @@ export class SoundController {
   protected _currentVoice: Sound | undefined | null = null;
   protected _currentSe: Sound | undefined | null = null;
   protected _onVoiceEnd: Function | undefined;
+  private _noVoiceTimeout: number | NodeJS.Timeout | undefined = undefined;
 
   static new() {
     return new this();
@@ -107,8 +108,10 @@ export class SoundController {
   _playVoice(FileName: string) {
     //不開聲音
     if (!this._isVoice) {
+      clearTimeout(this._noVoiceTimeout);
       this._voiceDuration = Math.max(4500, this._voiceDuration);
-      setTimeout(() => {
+      this._noVoiceTimeout = setTimeout(() => {
+        clearTimeout(this._noVoiceTimeout);
         this._onVoiceEnd?.();
       }, this._voiceDuration);
 

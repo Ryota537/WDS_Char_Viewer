@@ -217,6 +217,7 @@ export class AdvPlayer extends Container<any> {
       )
       .catch(() => this._coverOpening?.error());
 
+      //設置聲音controller的語音開關
       this.isVoice = loadResources?.isVoice ?? this._isVoice;
       
       res(this._episode);
@@ -297,8 +298,6 @@ export class AdvPlayer extends Container<any> {
     this._effectView.execute(this.currentTrack);
     this._backgroundView.execute(this.currentTrack);
     
-    //設置聲音controller的語音開關
-    this._soundController.isVoice = this._isVoice;
     //當播完聲音後 停止spine的口部動作
     this._soundController.onVoiceEnd = this._characterView.offAllLipSync.bind(this._characterView);
   }
@@ -393,7 +392,7 @@ export class AdvPlayer extends Container<any> {
 
     //聲音處理
     if(!this.isVoice){
-      //如果沒開聲音 就用文字時間來設定語音時間
+      //如果沒開聲音 口部動作時間就用文字時間來設定
       this._soundController.voiceDuration = (this._textView.typingTotalDuration ?? 0) * 2.5;
     }
     this._soundController.voice(this.currentTrack);

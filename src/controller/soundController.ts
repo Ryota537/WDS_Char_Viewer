@@ -138,6 +138,7 @@ export class SoundController {
     this._currentVoice?.stop();
     this._voiceDuration = 0;
     this._seDuration = 0;
+    clearTimeout(this._noVoiceTimeout);
   }
 
   set voiceDuration(duration: number) {

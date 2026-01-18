@@ -376,13 +376,7 @@ export class AdvPlayer extends Container<any> {
     
     //spine處理
     //如果有characterImage，則不顯示spine
-    if(this.currentTrack.BackgroundCharacterImageFileName){
-      this._characterView.hideCharacter();
-    }
-    //否則正常執行
-    else{
-      this._characterView.execute(this.currentTrack);
-    }
+    this._characterView.execute(this.currentTrack);
     
     //對話處理
     let phrase = this.currentTrack.Phrase;

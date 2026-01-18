@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { episodeExecutable, IView } from "../types/View";
-import { IEpisodeCharacter, IEpisodeUnitCharacterMotion } from "../types/Episode";
+import { IEpisodeBackground, IEpisodeCharacter, IEpisodeUnitCharacterMotion } from "../types/Episode";
 import { characterAnimation, AdventureAnimationStandCharacter } from '../object/characterSpineModel'
 // constant
 import LipSynParameters from "../constant/LipSync";
@@ -48,7 +48,7 @@ export class CharacterView extends IView implements episodeExecutable{
         this._prevCharacters = [];
     }
     
-    execute({ CharacterMotions }: IEpisodeCharacter) {
+    execute({ CharacterMotions, BackgroundCharacterImageFileName}: IEpisodeCharacter & IEpisodeBackground) {
         if(CharacterMotions.length === 0){
             this._motionCharacters = [];
             this.hideAllCharacter();
@@ -118,7 +118,7 @@ export class CharacterView extends IView implements episodeExecutable{
                 characterAnimation.mouthAnimationName = lipSync?.MotionName;
             }
 
-            model?.showCharacter();
+            model?.showCharacter(!BackgroundCharacterImageFileName);
             model?.SetAllAnimation(characterAnimation);
 
             this._motionCharacters.push({
@@ -165,5 +165,5 @@ export class CharacterView extends IView implements episodeExecutable{
     offAllLipSync() : void{
         this._motionCharacters.forEach(record => record.character?.offLipSync());
     }
-    
+
 }

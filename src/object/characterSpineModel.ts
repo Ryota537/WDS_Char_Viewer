@@ -229,12 +229,12 @@ export class AdventureAnimationStandCharacter {
         return this._model.skeleton.data.findAnimation(animationName) !== null;
     }
 
-    showCharacter(){
+    showCharacter(visible : boolean = true){
         if (!this._model.autoUpdate){
             this._model.update(0);
             this._model.autoUpdate = true; // 如果不放在 if 里面，在场上且没新动作的角色动画会越来越快
         }
-        this._model.visible = true;
+        this._model.visible = visible;
     }
 
     destory(){

@@ -64,7 +64,11 @@ Or you can create a new TranslateReader in [translationReader.ts](./src/constant
 
 ## Audio record for MediaRecorder
 
-Because there is no api for capturing audio from tab output and `MediaRecorder` does not support change stream during recording, global audio is needed for audio recording. Select any window or screen and **check `Also share system audio`** when browser prompt.
+~~Because there is no api for capturing audio from tab output and `MediaRecorder` does not support change stream during recording, global audio is needed for audio recording. Select any window or screen and **check `Also share system audio`** when browser prompt.~~
+
+Audio now capture from streamFilter.
+
+> tip: use `--autoplay-policy=no-user-gesture-required` flag to allow auto play audio without user interaction in Chrome.
 
 > **Notice: all sound will be captured.**
 

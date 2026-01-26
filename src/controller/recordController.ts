@@ -1,4 +1,5 @@
 import { OBSWebSocket } from 'obs-websocket-js';
+import { sound, filters } from "@pixi/sound";
 
 export interface IRecordController {
   start(): void;
@@ -14,8 +15,14 @@ export class MediaRecorderController implements IRecordController {
     this._recorder = recorder;
   }
 
-  public static create(stream: MediaStream, captureStream: MediaStream, mimeType: string = 'video/webm; codecs=vp9'): MediaRecorderController {
+  public static create(stream: MediaStream, mimeType: string = 'video/webm; codecs=vp9'): MediaRecorderController {
     const self = new this();
+    const captureStream = new MediaStream();
+    const streamFilter = new filters.StreamFilter();
+    streamFilter.stream.getAudioTracks().forEach((track) => {
+      captureStream.addTrack(track);
+    });
+    sound.filtersAll = [streamFilter];
     try {
       captureStream.getAudioTracks().forEach(element => {
         stream.addTrack(element);

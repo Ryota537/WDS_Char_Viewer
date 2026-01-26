@@ -34,7 +34,7 @@ if (sv && sv.toLowerCase() === 'true') {
       // default
       recordController = MediaRecorderController.create(
         app.canvas.captureStream(24),
-        await navigator.mediaDevices.getDisplayMedia({ audio: true })
+        // await navigator.mediaDevices.getDisplayMedia({ audio: true })
       );
       break;
   }

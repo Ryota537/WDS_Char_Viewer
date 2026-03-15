@@ -87,4 +87,29 @@ export class AdvPlayer extends Container<any> {
   public setBodyMotion(motionId: number) {
     this._characterView.setBodyMotion(motionId);
   }
+
+  public setHeadDirection(directionId: number) {
+    this._characterView.setHeadDirection(directionId);
+  }
+
+  // Deep Spine API passthrough
+  public getBones() {
+    return this._characterView.getBones();
+  }
+
+  public setBoneTransform(boneName: string, rotation?: number, scaleX?: number, scaleY?: number) {
+    this._characterView.setBoneTransform(boneName, rotation, scaleX, scaleY);
+  }
+
+  public getAnimations() {
+    return this._characterView.getAnimations();
+  }
+
+  public scrubAnimation(trackIndex: number, animName: string, progressRatio: number) {
+    this._characterView.scrubAnimation(trackIndex, animName, progressRatio);
+  }
+
+  public resetToSetupPose() {
+    this._characterView.resetToSetupPose();
+  }
 }

@@ -212,4 +212,41 @@ export class CharacterView extends IView implements episodeExecutable{
         this._currentViewerCharacter.SetAllAnimation({...this._currentViewerAnimation});
     }
 
+    public setHeadDirection(directionId: number) {
+        if (!this._currentViewerCharacter) return;
+        
+        let headDir = this._headDirections.find((hd) => hd.Id == directionId);
+        if (!headDir) return;
+        
+        this._currentViewerAnimation.headAnimationName = headDir.DirectionName;
+        this._currentViewerCharacter.SetAllAnimation({...this._currentViewerAnimation});
+    }
+
+    // --- Deep Spine API passthrough for Custom Mode ---
+
+    public getBones() {
+        return this._currentViewerCharacter?.getBones() ?? [];
+    }
+
+    public setBoneTransform(boneName: string, rotation?: number, scaleX?: number, scaleY?: number) {
+        this._currentViewerCharacter?.setBoneTransform(boneName, rotation, scaleX, scaleY);
+    }
+
+    public getAnimations() {
+        return this._currentViewerCharacter?.getAnimations() ?? [];
+    }
+
+    public scrubAnimation(trackIndex: number, animName: string, progressRatio: number) {
+        this._currentViewerCharacter?.scrubAnimation(trackIndex, animName, progressRatio);
+    }
+
+    public resetToSetupPose() {
+        this._currentViewerCharacter?.resetToSetupPose();
+        this._currentViewerAnimation = {};
+    }
+
+    public getCurrentCharacter() {
+        return this._currentViewerCharacter;
+    }
+
 }

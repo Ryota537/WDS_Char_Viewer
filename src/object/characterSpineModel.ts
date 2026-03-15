@@ -237,6 +237,52 @@ export class AdventureAnimationStandCharacter {
         this._model.visible = visible;
     }
 
+    // --- Deep Spine APIs for Custom Mode ---
+
+    getBones() {
+        return this._model.skeleton.bones;
+    }
+
+    setBoneTransform(boneName: string, rotation?: number, scaleX?: number, scaleY?: number) {
+        const bone = this._model.skeleton.findBone(boneName);
+        if (!bone) return;
+        if (rotation !== undefined) bone.rotation = rotation;
+        if (scaleX !== undefined) bone.scaleX = scaleX;
+        if (scaleY !== undefined) bone.scaleY = scaleY;
+    }
+
+    getAnimations() {
+        return this._model.skeleton.data.animations;
+    }
+
+    scrubAnimation(trackIndex: number, animName: string, progressRatio: number) {
+        const anim = this._model.skeleton.data.findAnimation(animName);
+        if (!anim) return;
+
+        const entry = this._model.state.setAnimation(trackIndex, animName, false);
+        entry.timeScale = 0; // pause playback
+        entry.trackTime = progressRatio * anim.duration;
+    }
+
+    resetToSetupPose() {
+        clearTimeout(this._eyeBlinkTimeout);
+        // Clear all tracks
+        this._model.state.clearTracks();
+        this._model.skeleton.setToSetupPose();
+        // Re-enable breath
+        this._model.state.setAnimation(0, "breath", true);
+        if (this._model.state.tracks[0] != null) {
+            this._model.state.tracks[0].timeScale = this._loopMotionData?.LoopSpeed || 1;
+        }
+        this._motions = {};
+    }
+
+    get model() {
+        return this._model;
+    }
+
+    // --- End Deep Spine APIs ---
+
     destory(){
         this._model.destroy();
     }

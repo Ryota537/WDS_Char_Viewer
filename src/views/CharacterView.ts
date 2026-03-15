@@ -166,4 +166,50 @@ export class CharacterView extends IView implements episodeExecutable{
         this._motionCharacters.forEach(record => record.character?.offLipSync());
     }
 
+    // --- Spine Viewer Controls ---
+    protected _currentViewerCharacter: AdventureAnimationStandCharacter | undefined;
+    protected _currentViewerAnimation: Partial<characterAnimation> = {};
+
+    public spawnCharacter(spineId: number) {
+        this.clear();
+        this._currentViewerAnimation = {};
+        
+        let model = new AdventureAnimationStandCharacter(spineId);
+        model.changePosition(3); // CharacterPositions.Center
+        model.showCharacter(true);
+        model.addTo(this);
+        
+        this._currentViewerCharacter = model;
+        this._standCharacters.set(`${spineId}`, model);
+    }
+
+    public setExpression(expressionId: number) {
+        if (!this._currentViewerCharacter) return;
+        
+        let expression = this._facialExpressions.find((exp) => exp.Id == expressionId);
+        if (!expression) return;
+        
+        // Merge state
+        this._currentViewerAnimation.eyebrowAnimationName = expression.EyeBrow;
+        this._currentViewerAnimation.eyeMotionName = expression.Eye;
+        this._currentViewerAnimation.eyeAnimationName = expression.EyeBlink ?? undefined;
+        this._currentViewerAnimation.cheekAnimationName = expression.Cheek;
+        this._currentViewerAnimation.mouthAnimationName = expression.Mouth;
+        this._currentViewerAnimation.FacialExpressionMasterId = expressionId;
+        
+        // Apply deeply merged animation state
+        this._currentViewerCharacter.SetAllAnimation({...this._currentViewerAnimation});
+    }
+
+    public setBodyMotion(motionId: number) {
+        if (!this._currentViewerCharacter) return;
+        
+        let bodyMotion = this._BodyMotions.find((motion) => motion.Id == motionId);
+        if (!bodyMotion) return;
+        
+        this._currentViewerAnimation.bodyAnimationName = bodyMotion.MotionName;
+        
+        this._currentViewerCharacter.SetAllAnimation({...this._currentViewerAnimation});
+    }
+
 }

@@ -1,50 +1,63 @@
 import { getUrlParams } from "./utils/UrlParams";
 import { AdvPlayer } from "./AdvPlayer";
 import { createApp } from "./utils/createApp";
-import { IRecordController, MediaRecorderController, OBSController } from "./controller/recordController";
+import FacialExpression from "./constant/FacialExpression";
+import BodyMotion from "./constant/BodyMotion";
 
-const { id, tl, at, sv, rc, obsurl, obspass, renderer } = getUrlParams();
+const { renderer } = getUrlParams();
 
 const app = await createApp(<'webgl' | 'webgpu'> renderer);
-// const iFrameDetection = (window === window.parent);
 
 //create Adv Player
 const advplayer = await AdvPlayer.create(app.stage);
-(globalThis as any).advplayer = advplayer;
+(window as any).viewerControl = advplayer;
 
-// advplayer.loadAndPlay('2006008');
-// advplayer.loadAndPlay('1010110', 'zhcn');
+let currentSpineId = 10101;
+await advplayer.initModelViewer(currentSpineId);
 
-let _id = id ?? prompt("Please enter the story Id", "1000000");
-
-if (sv && sv.toLowerCase() === 'true') {
-  let recordController: IRecordController | undefined;
-
-  switch (rc?.toLowerCase()) {
-    case 'obs':
-      if (obsurl) {
-        recordController = await OBSController.create(obsurl, obspass);
-      }
-      break;
-    case 'mediarecorder':
-    case 'mr':
-    case '':
-    case undefined:
-    default:
-      // default
-      recordController = MediaRecorderController.create(
-        app.canvas.captureStream(24),
-        // await navigator.mediaDevices.getDisplayMedia({ audio: true })
-      );
-      break;
-  }
-
-  if (recordController) {
-    if (typeof recordController.setFileName === "function") {
-      recordController.setFileName(`wds_adv_record_${_id}${tl ? `_${tl}` : ''}_${new Date().valueOf()}.mkv`);
-    }
-    advplayer.setRecorder(recordController);
-  }
+// Setup UI
+const expressionSelect = document.getElementById('expression-select') as HTMLSelectElement;
+if (expressionSelect) {
+    FacialExpression.forEach(exp => {
+        const option = document.createElement('option');
+        option.value = exp.Id.toString();
+        option.text = `ID: ${exp.Id} (${exp.EyeBrow}, ${exp.Mouth})`;
+        expressionSelect.appendChild(option);
+    });
+    
+    expressionSelect.addEventListener('change', (e) => {
+        const val = parseInt((e.target as HTMLSelectElement).value);
+        if(!isNaN(val)) advplayer.setExpression(val);
+    });
 }
 
-_id && advplayer.loadAndPlay(_id, tl, at, sv);
+const motionSelect = document.getElementById('motion-select') as HTMLSelectElement;
+if (motionSelect) {
+    BodyMotion.forEach(mot => {
+        const option = document.createElement('option');
+        option.value = mot.Id.toString();
+        option.text = mot.MotionName;
+        motionSelect.appendChild(option);
+    });
+    
+    motionSelect.addEventListener('change', (e) => {
+        const val = parseInt((e.target as HTMLSelectElement).value);
+        if(!isNaN(val)) advplayer.setBodyMotion(val);
+    });
+}
+
+const spineInput = document.getElementById('spine-id') as HTMLInputElement;
+const loadButton = document.getElementById('load-spine') as HTMLButtonElement;
+if (spineInput && loadButton) {
+    loadButton.addEventListener('click', async () => {
+        const val = parseInt(spineInput.value);
+        if (!isNaN(val)) {
+            currentSpineId = val;
+            await advplayer.initModelViewer(currentSpineId);
+            
+            // Reset dropdowns
+            if (expressionSelect) expressionSelect.value = "";
+            if (motionSelect) motionSelect.value = "";
+        }
+    });
+}

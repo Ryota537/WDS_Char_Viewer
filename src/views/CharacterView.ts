@@ -249,4 +249,7 @@ export class CharacterView extends IView implements episodeExecutable{
         return this._currentViewerCharacter;
     }
 
+    public get model() {
+        return this._currentViewerCharacter?.model;
+    }
 }

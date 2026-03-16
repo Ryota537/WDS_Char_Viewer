@@ -312,33 +312,78 @@ function buildBoneSliders() {
         return;
     }
 
-    const boneNames = bones.map((b: any) => b.data.name as string);
+    const categories: Record<string, typeof bones> = {
+        "Fingers": [],
+        "Arms": [],
+        "Head & Face": [],
+        "Torso": [],
+        "Legs": [],
+        "Others": []
+    };
 
-    boneNames.forEach((boneName) => {
-        const bone = bones.find((b: any) => b.data.name === boneName);
-        if (!bone) return;
+    bones.forEach((bone: any) => {
+        const name = (bone.data.name as string).toLowerCase();
 
-        const item = document.createElement("div");
-        item.className = "slider-item";
-        const defaultRotation = bone.rotation || 0;
+        if (/thumb|index|middle|ring|pinky|finger|yubi/.test(name)) {
+            categories["Fingers"].push(bone);
+        } else if (/arm|elbow|wrist|shoulder|hand/.test(name)) {
+            categories["Arms"].push(bone);
+        } else if (/head|neck|eye|brow|mouth|lip|hair|ear|jaw|cheek/.test(name)) {
+            categories["Head & Face"].push(bone);
+        } else if (/spine|hip|chest|pelvis|bust|root/.test(name)) {
+            categories["Torso"].push(bone);
+        } else if (/leg|knee|foot|ankle|toe/.test(name)) {
+            categories["Legs"].push(bone);
+        } else {
+            categories["Others"].push(bone);
+        }
+    });
 
-        item.innerHTML = `
-            <div class="slider-header">
-                <span class="slider-label">${boneName}</span>
-                <span class="slider-value">${defaultRotation.toFixed(1)}°</span>
-            </div>
-            <input type="range" min="-180" max="180" step="0.5" value="${defaultRotation}">
-        `;
-        container.appendChild(item);
+    Object.keys(categories).forEach((categoryName) => {
+        const group = categories[categoryName];
+        if (group.length === 0) return;
 
-        const slider = item.querySelector("input") as HTMLInputElement;
-        const valueDisplay = item.querySelector(".slider-value") as HTMLSpanElement;
+        const details = document.createElement("details");
+        details.style.marginBottom = "10px";
+        details.style.paddingLeft = "5px";
+        details.style.borderLeft = "2px solid #555";
+        
+        const summary = document.createElement("summary");
+        summary.style.fontWeight = "bold";
+        summary.style.cursor = "pointer";
+        summary.style.padding = "5px 0";
+        summary.style.color = "rgba(255,255,255,0.7)";
+        summary.style.fontSize = "12px";
+        summary.textContent = `${categoryName} (${group.length} bones)`;
+        
+        details.appendChild(summary);
 
-        slider.addEventListener("input", () => {
-            const rotation = parseFloat(slider.value);
-            valueDisplay.textContent = `${rotation.toFixed(1)}°`;
-            advplayer.setBoneTransform(boneName, rotation);
+        group.forEach((bone: any) => {
+            const boneName = bone.data.name;
+            const item = document.createElement("div");
+            item.className = "slider-item";
+            const defaultRotation = bone.rotation || 0;
+
+            item.innerHTML = `
+                <div class="slider-header">
+                    <span class="slider-label">${boneName}</span>
+                    <span class="slider-value">${defaultRotation.toFixed(1)}°</span>
+                </div>
+                <input type="range" min="-180" max="180" step="0.5" value="${defaultRotation}">
+            `;
+            details.appendChild(item);
+
+            const slider = item.querySelector("input") as HTMLInputElement;
+            const valueDisplay = item.querySelector(".slider-value") as HTMLSpanElement;
+
+            slider.addEventListener("input", () => {
+                const rotation = parseFloat(slider.value);
+                valueDisplay.textContent = `${rotation.toFixed(1)}°`;
+                advplayer.setBoneTransform(boneName, rotation);
+            });
         });
+
+        container.appendChild(details);
     });
 }
 

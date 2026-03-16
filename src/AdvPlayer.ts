@@ -120,4 +120,8 @@ export class AdvPlayer extends Container<any> {
   public resetToSetupPose() {
     this._characterView.resetToSetupPose();
   }
+
+  public get model() {
+    return this._characterView.model;
+  }
 }

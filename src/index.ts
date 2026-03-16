@@ -68,6 +68,21 @@ const presetTab = document.getElementById("tab-preset")!;
 const customTab = document.getElementById("tab-custom")!;
 const resetBtn = document.getElementById("reset-pose-btn");
 
+// ===== Collapsible Panel =====
+const controlPanel = document.getElementById("control-panel")!;
+const collapseBtn = document.getElementById("collapse-btn")!;
+const panelToggle = document.getElementById("panel-toggle")!;
+
+collapseBtn.addEventListener("click", () => {
+    controlPanel.classList.add("collapsed");
+    panelToggle.classList.add("visible");
+});
+
+panelToggle.addEventListener("click", () => {
+    controlPanel.classList.remove("collapsed");
+    panelToggle.classList.remove("visible");
+});
+
 // ===== Character Selector =====
 function populateCharacterDropdown() {
     characterSelect.innerHTML = '<option value="">-- Select Character --</option>';

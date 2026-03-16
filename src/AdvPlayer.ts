@@ -72,7 +72,7 @@ export class AdvPlayer extends Container<any> {
     await this.clear();
 
     // 1. Set background to solid green (#00FF00) for chroma keying
-    const bgSprite = createEmptySprite({ empty: false, color: 0x00FF00, width: 1920, height: 1080 });
+    const bgSprite = createEmptySprite({ empty: false, color: 0x00FF00, width: 1080, height: 1440 });
     this._backgroundView.addChild(bgSprite);
 
     // 2. Load spinal assets

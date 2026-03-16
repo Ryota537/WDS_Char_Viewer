@@ -1,6 +1,9 @@
 import { Group } from "tweedle.js";
 import { Application, Ticker } from "pixi.js";
 
+export const CANVAS_WIDTH = 1080;
+export const CANVAS_HEIGHT = 1440;
+
 export let currenRenderer: string;
 
 export async function createApp(preference: 'webgl' | 'webgpu' = 'webgpu') {
@@ -16,8 +19,8 @@ export async function createApp(preference: 'webgl' | 'webgpu' = 'webgpu') {
     await pixiapp.init({
       preference,
       hello : false,
-      width: 1920,
-      height: 1080,
+      width: CANVAS_WIDTH,
+      height: CANVAS_HEIGHT,
       backgroundAlpha: 0,
     });
 
@@ -40,10 +43,10 @@ export async function createApp(preference: 'webgl' | 'webgpu' = 'webgpu') {
         window.innerHeight || 0
       );
   
-      const ratio = Math.min(screenWidth / 1920, screenHeight / 1080);
+      const ratio = Math.min(screenWidth / CANVAS_WIDTH, screenHeight / CANVAS_HEIGHT);
   
-      let resizedX = Math.floor(1920 * ratio);
-      let resizedY = Math.floor(1080 * ratio);
+      let resizedX = Math.floor(CANVAS_WIDTH * ratio);
+      let resizedY = Math.floor(CANVAS_HEIGHT * ratio);
   
       pixiapp.canvas.style.width = resizedX + "px";
       pixiapp.canvas.style.height = resizedY + "px";

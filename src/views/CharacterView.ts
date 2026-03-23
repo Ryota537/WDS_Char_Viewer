@@ -166,6 +166,10 @@ export class CharacterView extends IView implements episodeExecutable{
         this._motionCharacters.forEach(record => record.character?.offLipSync());
     }
 
+    resizeCharacter() {
+        this._standCharacters.forEach(char => char.resize());
+    }
+
     // --- Spine Viewer Controls ---
     protected _currentViewerCharacter: AdventureAnimationStandCharacter | undefined;
     protected _currentViewerAnimation: Partial<characterAnimation> = {};

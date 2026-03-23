@@ -12,21 +12,18 @@ type SpineRegistry = Record<string, string[]>; // baseId -> variation suffixes[]
 
 async function fetchSpineRegistry(): Promise<SpineRegistry> {
     const res = await fetch(
-        "https://api.github.com/repos/wds-sirius/adv-resource/contents/spine"
+        "https://raw.githubusercontent.com/wds-sirius/Adv-Resource/refs/heads/main/manifest/Spine.json"
     );
     if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
 
-    const items: { name: string }[] = await res.json();
+    const items: { Id: number, CharacterId: number, CompanyId: number }[] = await res.json();
     const registry: SpineRegistry = {};
-    const idRegex = /^(\d{5})\.png$/;
 
     for (const item of items) {
-        const match = item.name.match(idRegex);
-        if (!match) continue;
-
-        const fullId = match[1]; // e.g. "10101"
-        const baseId = fullId.slice(0, 3); // e.g. "101"
-        const variation = fullId.slice(3); // e.g. "01"
+        const idStr = item.Id.toString();
+        
+        const baseId = item.CharacterId.toString();
+        const variation = idStr.slice(-2);
 
         if (!registry[baseId]) registry[baseId] = [];
         registry[baseId].push(variation);
@@ -52,6 +49,11 @@ let currentMode: "preset" | "custom" = "preset";
 let spineRegistry: SpineRegistry = {};
 
 await advplayer.initModelViewer(currentSpineId);
+
+window.addEventListener('wds-resize', () => {
+    advplayer.resizeBackground();
+    advplayer.resizeCharacter();
+});
 
 // ===== DOM refs =====
 const characterSelect = document.getElementById("character-select") as HTMLSelectElement;

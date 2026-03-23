@@ -71,10 +71,8 @@ export class AdvPlayer extends Container<any> {
   public async initModelViewer(spineId: number = 10101) {
     await this.clear();
 
-    // 1. Set background to solid green (#00FF00) for chroma keying
-    const bgSprite = createEmptySprite({ empty: false, color: 0x00FF00, width: 1080, height: 1440 });
-    this._backgroundView.addChild(bgSprite);
-
+    // 1. Load Custom Background Image
+    await this._backgroundView.loadViewerBackground();
     // 2. Load spinal assets
     const resources: Record<string, string> = {};
     resources[`spine_${spineId}`] = resPath.spine(spineId);
@@ -127,6 +125,14 @@ export class AdvPlayer extends Container<any> {
 
   public resetHandGestures() {
     this._characterView.resetHandGestures();
+  }
+
+  public resizeBackground() {
+    this._backgroundView.resizeBackground();
+  }
+  
+  public resizeCharacter() {
+    this._characterView.resizeCharacter();
   }
 
   public get model() {

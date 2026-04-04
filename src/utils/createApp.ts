@@ -1,5 +1,4 @@
-import { Group } from "tweedle.js";
-import { Application, Ticker } from "pixi.js";
+import { Application } from "pixi.js";
 
 export let currenRenderer: string;
 
@@ -35,8 +34,7 @@ export async function createApp(preference: 'webgl' | 'webgpu' = 'webgpu') {
     // PixiJS's `resizeTo: window` will automatically manage the <canvas> inline styles
     document.body.appendChild(pixiapp.canvas);
   
-    Ticker.shared.add(() => Group.shared.update());
-    
+
     // Global resize listener that alerts our custom views
     window.addEventListener('resize', () => {
       window.dispatchEvent(new Event('wds-resize'));

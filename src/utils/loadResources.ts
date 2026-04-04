@@ -4,7 +4,7 @@ import '@esotericsoftware/spine-pixi-v8'
 import resPath from "./resPath";
 import { IEpisodeModel } from "../types/Episode";
 import { parse } from 'papaparse'
-import { IEpisodeTranslateUnit, IEpisodeTranslateModel } from "../types/translation";
+
 
 export async function loadJson<T extends Object>(source : string) : Promise<T>{
     return fetch(source)
@@ -143,59 +143,3 @@ export function loadPlayerAssetsBundle(name : string, bundle : AssetsBundle["ass
     return Assets.loadBundle(name);
 }
 
-export async function loadTranslateModel(source : string){
-    const records = await loadCsv<IEpisodeTranslateUnit>(source);
-    const TLdetail : IEpisodeTranslateModel = {
-        translateDetail : records.filter((record) => record.Phrase) as IEpisodeTranslateUnit[],
-    }
-    for(let record of records.filter((record) => !record.Phrase)) {
-        if(record.Id.toLowerCase() === 'translator'){
-            TLdetail.translator = record.SpeakerName;
-        }
-        if(record.Id.toLowerCase() === 'proofreader'){
-            TLdetail.proofreader = record.SpeakerName;
-        }
-        if(record.Id.toLowerCase() === 'title' || record.Id.toLowerCase() === 'tltitle'){
-            TLdetail.TLTitle = record.SpeakerName;
-        }
-        if(record.Id.toLowerCase() === 'info'){
-            TLdetail.info = record.SpeakerName;
-        }
-        if(record.Id.toLowerCase() === 'chapter' || record.Id.toLowerCase() === 'tlchapter'){
-            TLdetail.TLChapter = record.SpeakerName;
-        }
-    }
-    
-    return records.length > 0 ? TLdetail : void 0;
-}
-
-export async function loadTranslateModelFromJson(source : string, epid: number){
-    const response = await fetch(source);
-    if (!response.ok) {
-        if (response.status === 404) {
-            // 翻译不存在，返回 void 0
-            return void 0;
-        }
-        throw new Error(response.statusText);
-    }
-    const jsonData = await response.json();
-    
-    // 转换自定义JSON格式为IEpisodeTranslateModel
-    if (jsonData && jsonData.translated && Array.isArray(jsonData.translated)) {
-        const translateDetail = jsonData.translated.map((item: any, index: number) => ({
-            Id: `${epid}${(index + 1).toString().padStart(3, '0')}`, // 生成正确的ID格式：{epid}{index}
-            SpeakerName: item.SpeakerName || "",
-            Phrase: "", // 原文保持为空，因为这是翻译内容
-            translation: item.Phrase || ""
-        }));
-
-        const TLdetail : IEpisodeTranslateModel = {
-            translator: "AI翻译",
-            translateDetail: translateDetail
-        };
-        
-        return translateDetail.length > 0 ? TLdetail : void 0;
-    }
-    
-    return void 0;
-}

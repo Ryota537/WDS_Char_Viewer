@@ -2,7 +2,6 @@ import { Container, Assets } from "pixi.js";
 //views
 import { BackgroundView } from "./views/BackgroundView";
 import { CharacterView } from "./views/CharacterView";
-import { EffectView } from "./views/EffectView";
 
 //constant
 import { baseAssets, Layer } from "./constant/advConstant";
@@ -14,10 +13,8 @@ import { loadPlayerAssetsBundle } from './utils/loadResources';
 export class AdvPlayer extends Container<any> {
   //init
   protected _inited : boolean = false;
-  //View
   protected _backgroundView!: BackgroundView;
   protected _characterView!: CharacterView;
-  protected _effectView!: EffectView;
 
   constructor() {
     super();
@@ -41,9 +38,8 @@ export class AdvPlayer extends Container<any> {
     await loadPlayerAssetsBundle('baseAssets', baseAssets);
 
     //views
-    this._effectView = new EffectView().addTo(this, Layer.EffectLayer);
-    this._characterView = new CharacterView().addTo(this._effectView, Layer.CharacterLayer);
-    this._backgroundView = new BackgroundView().addTo(this._effectView, Layer.BackgroundLayer);
+    this._characterView = new CharacterView().addTo(this, Layer.CharacterLayer);
+    this._backgroundView = new BackgroundView().addTo(this, Layer.BackgroundLayer);
 
     this._inited = true;
   }
@@ -57,7 +53,6 @@ export class AdvPlayer extends Container<any> {
     //hide all view!
     this._backgroundView.clear();
     this._characterView.clear();
-    this._effectView.clear();
   }
 
   public hideBackground() {

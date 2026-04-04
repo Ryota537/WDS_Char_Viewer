@@ -36,39 +36,6 @@ export enum Layer {
     CoverLayer = 12,
 }
 
-export const baseAssets = {
-    font: "./RoNOWStd-GBs.otf",
-    icon_bg_red: "./btn_story_scene_icon_bg_red.png",
-    icon_bg_common: "./btn_common_square.png",
-    log_voice_bg: "./btn_story_scene_log_voice_bg.png",
-    icon_auto: "./btn_story_scene_icon_auto.png",
-    // icon_full_screen : './btn_story_scene_icon_full_screen.png', // 未用到就不laod
-    // icon_log : './btn_story_scene_icon_log.png',
-    // icon_option : './btn_story_scene_icon_option.png',
-    // icon_skip : './btn_story_scene_icon_skip.png',
-    // icon_voice : './btn_story_scene_icon_voice.png',
-    icon_translate: "./btn_story_scene_icon_translate.png",
-    icon_next: "./btn_story_scene_icon_next.png",
-    slide: "./btn_story_scene_slide.png",
-    name_bg: "./frm_story_scene_name_bg.png",
-    serif_window_bg: "./frm_story_scene_serif_window_bg.png",
-    bg_pattern: "./ptn_common_05.png",
-    tap_to_start: "./txt_title_common_start.png",
-    illust_jugon_1: "./img_story_scene_illust_jugon_1.png",
-    illust_jugon_2: "./img_story_scene_illust_jugon_2.png",
-    illust_jugon_3: "./img_story_scene_illust_jugon_3.png",
-    jugon_progress: "./jugon_progress/jugon_progress.skel",
-    jugon_progress_atlas: "./jugon_progress/jugon_progress.atlas",
-    sepia : "./sepia2.png",
-    whiteBlur : "./whiteBlurEffect.png",
-    // dialog window
-    // window_dialog_pattern : "./dialog/frm_window_dialog_pattern.png",
-    // window_dialog_triangle : "./dialog/frm_window_dialog_triangle.png",
-    // window_dialog_icon_footprint : './dialog/img_window_dialog_icon_footprint.png',
-    // window_dialog_illust : './dialog/frm_window_dialog_illust.png',
-    // window_dialog_bg : './dialog/frm_window_dialog_bg_r40.png',
-    // common_btn_large_red : './dialog/btn_common_btn_large_red.png',
-    // common_btn_large : './dialog/btn_common_btn_large.png',
-};
+export const baseAssets = {};
 
 export const baseAssetsUrl = "https://raw.githubusercontent.com/wds-sirius/Adv-Resource/main";

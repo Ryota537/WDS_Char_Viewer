@@ -51,7 +51,7 @@ export const CHARACTER_MAP: Record<string, { name: string; theater: string }> = 
     "521": { name: "Renjakuno Futaba", theater: "Others" },
     "522": { name: "Hibari", theater: "Others" },
     "601": { name: "Komae Chiho", theater: "Others" },
-    "601": { name: "Eva", theater: "Others" },
+    "602": { name: "Eva", theater: "Others" },
     "901": { name: "Takami Chika", theater: "Love Live! Sunshine!!" },
     "902": { name: "Sakurauchi Riko", theater: "Love Live! Sunshine!!" },
     "904": { name: "Kurosawa Dia", theater: "Love Live! Sunshine!!" },
